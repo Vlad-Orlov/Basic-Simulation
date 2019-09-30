@@ -41,7 +41,7 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-// Класс, в котором описывается положение, тип, энергию, направление вылета
+// Класс, в котором описывается положение, тип, энергия, направление вылета
 // и распределение начальных частиц
 ExG4PrimaryGeneratorAction01::ExG4PrimaryGeneratorAction01()
 : G4VUserPrimaryGeneratorAction(),
