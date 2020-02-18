@@ -1,32 +1,4 @@
-﻿// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes, nor the agencies providing financial support for this*
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// *                                                                  *
-// * Разработано специально для dev.asifmoda.com                      *
-// * Можно использовать для обучения, частных и коммерческих проектов.*
-// * Прывітанне з Беларусі!                                           *
-// * Автор, идея и реализация:                                        *
-// * Виктор Гавриловец, bycel@tut.by,                                 *
-// ********************************************************************
-
-// Подключаем заголовочные файлы
+﻿// Подключаем заголовочные файлы
 #include "G4RunManager.hh" // RunManager, класс из ядра Geant4,
 //должен быть включен обязательно
 #include "G4UImanager.hh" // Менеджер взаимодействия с пользователем
@@ -36,10 +8,13 @@
 //в проекте, готовый физический лист из Geant4
 #include "ExG4ActionInitialization01.hh" // Пользовательский класс
 //для задания начального источника частиц
-#ifdef G4UI_USE //Если используется интерфейс пользователя то включаем визуализацию
 #include "G4VisExecutive.hh"//Визуализация
 #include "G4UIExecutive.hh"//Выбор соответствующего интерфейса пользователя
-#endif
+#include "G4UIterminal.hh"
+
+//#ifdef G4UI_USE //Если используется интерфейс пользователя то включаем визуализацию
+//#include "G4VisExecutive.hh"//Визуализация
+//#endif
 
 int main(int argc,char** argv)
 {
@@ -71,14 +46,13 @@ G4UImanager* UImanager = G4UImanager::GetUIpointer();
 if ( argc == 1 ) {//Если через командную строку ничего не передавалось
 // То устанавливаем  интерактивный режим
 // Если используется визуализация
-#ifdef G4UI_USE
 G4UIExecutive* ui = new G4UIExecutive(argc, argv);//Создание интерфейса пользователя
 UImanager->ApplyCommand("/control/execute vis.mac");//Отрисовываем по заранее подготовленному
 // файлу vis.mac
 ui->SessionStart();//Запуск интерфейса пользователя
 delete ui;//Удаление интерфейса пользователя
-#endif
 }
+
 else {
 // Если были переданы параметры, по включаем пакетный режим
 G4String command = "/control/execute ";//Записываем в строковую переменную
