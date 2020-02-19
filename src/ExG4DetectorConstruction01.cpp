@@ -7,10 +7,12 @@
 #include "G4SDManager.hh"
 #include "G4NistManager.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4PhysicalConstants.hh"
+#include "globals.hh"
 // Конструктор класса объявления материалов и геометрии всей моделируемой системы
 ExG4DetectorConstruction01::ExG4DetectorConstruction01()
 : G4VUserDetectorConstruction()
@@ -45,7 +47,7 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
   // Объем мира, самый большой объем, включающий остальные, аналог экспериментального
   // зала
   G4double world_sizeXY = 30*cm;//Размер по x и y здесь будут одинаковы - ширина и высота
-  G4double world_sizeZ  = 20*cm;//Размер по z - толщина
+  G4double world_sizeZ  = 30*cm;//Размер по z - толщина
   // Выбор материала для мира из предопределенных в Geant4, для зала берем воздух
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
   
@@ -76,10 +78,17 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
                       0,                     //copy number, номер копии
                       checkOverlaps);        //overlaps checking, флаг проверки перекрытия объемов
                         
-  // Детектор, для него также используем параллелепипед
-  G4Box* solidDet =
-    new G4Box("Detector",                    //its name, имя
-        0.5*det_sizeXY, 0.5*det_sizeXY, 0.5*det_sizeZ); //its size, размеры
+  // Детектор, для него используем цилиндр
+
+  G4Tubs* solidDet =
+    new G4Tubs("Detector",
+                        0,
+                    15*mm,
+                    35*mm,
+                        0,
+                    twopi);
+
+
 
   //Логический объем
   G4LogicalVolume* logicDet =
@@ -89,7 +98,7 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
 
   //Физический объем детектора
   new G4PVPlacement(0,                       //no rotation, так же без вращения
-                    G4ThreeVector(0,0,5*cm), //at (0,0,5 см) положение центра детектора, он смещен на 5 см от центра объема World
+                    G4ThreeVector(0,0,0),    //at (0,0,5 см) положение центра детектора, он смещен на 5 см от центра объема World
                     logicDet,                //its logical volume, подключаем логический объем
                     "Detector",              //its name, имя физического объема
                     logicWorld,              //its mother  volume, родительский логический объем, помещаем в world!
@@ -106,14 +115,14 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
                         "Target");         //its name, его имя
 
   //Физический объем мишени
-  new G4PVPlacement(0,                       //no rotation, так же без вращения
-                    G4ThreeVector(0,0,-5*cm),//at (0,0,-5 см) положение центра мишени в другую сторону от детектора, смещена на 5 см от центра объема World
-                    logicTar,                //its logical volume, подключаем логический объем
-                    "Target",                //its name, имя физического объема
-                    logicWorld,              //its mother  volume, родительский логический объем!
-                    false,                   //no boolean operation, без булевых операций
-                    0,                       //copy number, номер копии
-                    checkOverlaps);
+//  new G4PVPlacement(0,                       //no rotation, так же без вращения
+//                    G4ThreeVector(0,0,-5*cm),//at (0,0,-5 см) положение центра мишени в другую сторону от детектора, смещена на 5 см от центра объема World
+//                    logicTar,                //its logical volume, подключаем логический объем
+//                    "Target",                //its name, имя физического объема
+//                    logicWorld,              //its mother  volume, родительский логический объем!
+//                    false,                   //no boolean operation, без булевых операций
+//                    0,                       //copy number, номер копии
+//                    checkOverlaps);
   //Всегда возвращает физический объем
   return physWorld;
 }
