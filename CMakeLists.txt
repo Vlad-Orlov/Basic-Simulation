@@ -21,11 +21,31 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+
+#----------------------------------------------------------------------------
+# You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
+#   - ROOT built with classic configure/make use the provided $ROOTSYS/etc/cmake/FindROOT.cmake
+#   - ROOT built with CMake. Add in CMAKE_PREFIX_PATH the installation prefix for ROOT
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+list(APPEND CMAKE_MODULE_PATH $ENV{ROOTSYS}/etc/cmake)
+
+set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl")
+
+#---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
+find_package(ROOT REQUIRED COMPONENTS RIO Net)
+
+#---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
+include(${ROOT_USE_FILE})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 # Подключение директорий  из Geant4
 # Подключение директорий проекта
 #
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${ROOT_INCLUDE_DIRS})
+
 
 # Расположение искодного кода и заголовочных файлов этого проекта
 # Заголовочные файлы подключаются, значит что они будут показаны в 
@@ -39,10 +59,11 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 # file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h)
 
+
 # Добавление исполняемого файла и линковка его с библиотеками Geant4
 #
 add_executable(example2 example2.cpp ${sources} ${headers})
-target_link_libraries(example2 ${Geant4_LIBRARIES})
+target_link_libraries(example2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 # Копирование скриптов в директорию сборки - туда, где мы собираем проект.
 # Таким образом мы сможем запустить проект в директории сборки - текущей рабочей
