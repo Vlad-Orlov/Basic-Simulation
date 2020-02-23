@@ -81,12 +81,12 @@ G4VPhysicalVolume* ExG4DetectorConstruction01::Construct()
   // Детектор, для него используем цилиндр
 
   G4Tubs* solidDet =
-    new G4Tubs("Detector",
-                        0,
-                    15*mm,
-                    35*mm,
-                        0,
-                    twopi);
+    new G4Tubs("Detector",                   //name
+                        0,                   //inner radius
+                    15*mm,                   //outter radius
+                    35*mm,                   //half length
+                        0,                   //starting angle
+                    twopi);                  //ending angle
 
 
 
