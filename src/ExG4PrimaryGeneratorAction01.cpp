@@ -30,14 +30,14 @@ ExG4PrimaryGeneratorAction01::ExG4PrimaryGeneratorAction01()
   G4String particleName;
   // Ищем частицу, в нашем случае протон
   G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="proton");
+    = particleTable->FindParticle(particleName="gamma");
   // Устанавливаем полученную частицу в качестве испускаемого типа начальных частиц в источнике
   fParticleGun->SetParticleDefinition(particle);
   // Устанавливаем направление движение частицы по (x,y,z)
   // Здесь устанавливается направление вдоль оси Z
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  // Установка начальной энергии испускаемых частиц, 50 МэВ
-  fParticleGun->SetParticleEnergy(50*MeV);
+  // Установка начальной энергии испускаемых частиц, 2.8 МэВ
+  fParticleGun->SetParticleEnergy(2.8*MeV);
 }
 
 // Деструктор
